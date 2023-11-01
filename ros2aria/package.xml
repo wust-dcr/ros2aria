@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ros2aria</name>
+  <version>0.1.0</version>
+  <description>
+    The <tt>Ros2Aria</tt> node provides a ROS interface for most Adept MobileRobots,
+    MobileRobots Inc., and ActivMedia mobile robot bases including
+    Pioneer 2, Pioneer 3, AmigoBot, PeopleBot, PowerBot, PatrolBot, Seekur,
+    Seekur Jr., Pioneer LX,
+    and any other past, current or future robot base supported by Adept MobileRobot's
+    open source ARIA library.
+    Information from the robot base, and velocity and acceleration control, is implemented
+    via a <tt>RosAria</tt> node, which publishes topics providing data recieved from
+    the robot's embedded controller by ARIA, and sets desired velocity, acceleration and
+    other commands in ARIA when new commands are received from command topics.
+  </description>
+  <maintainer email="srecko.juric-kavelj@fer.hr">Srećko Jurić-Kavelj</maintainer>
+  <maintainer email="ivan.markovic@fer.hr">Ivan Marković</maintainer>
+  <maintainer email="reed.hedges@aedpt.com">Reed Hedges</maintainer>
+  <maintainer email="l15@kcir.pwr.edu.pl">
+    Autonomous Robot Lab L1.5 on WUST Department of Cybernetics and Robotics
+  </maintainer>
+
+  <author email="srecko.juric-kavelj@fer.hr">Srećko Jurić-Kavelj</author>
+  <author email="damian.baranski@pwr.edu.pl">Damian Barański</author>
+  <author email="aleksander.bojda@pwr.edu.pl">Aleksander Bojda</author>
+  <author email="me@irth.pl">Wojciech Kwolek</author>
+  <author email="delicat.kuba@gmail.com">Jakub Delicat</author>
+
+  <license>GPL2</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <depend>rclcpp</depend>
+  <depend>std_srvs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>ros2aria_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

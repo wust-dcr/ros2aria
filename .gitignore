@@ -1,0 +1,6 @@
+.vscode
+
+# ROS 2 builds
+build/
+install/
+log/

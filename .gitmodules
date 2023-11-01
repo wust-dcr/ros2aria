@@ -1,0 +1,3 @@
+[submodule "ros2aria/lib/AriaCoda"]
+	path = ros2aria/lib/AriaCoda
+	url = https://github.com/reedhedges/AriaCoda

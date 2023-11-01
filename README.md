@@ -1,4 +1,13 @@
+# ros2aria
 
-For information on how to use RosAria, see <http://wiki.ros.org/ROSARIA>,
-especially <http://wiki.ros.org/ROSARIA/Tutorials/How to use ROSARIA>.
-
+# Build
+```
+mkdir -p ros2aria_ws/src
+cd ros2aria_ws
+git clone https://github.com/wust-dcr/ros2aria src/ros2aria
+cd src/ros2aria
+git submodule update --init
+cd ../../
+colcon build
+source install/setup.bash
+```
