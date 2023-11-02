@@ -31,9 +31,9 @@ RAIIBot::RAIIBot(rclcpp::Node *node, std::string port) {
 
     this->robotConn = new ArRobotConnector(argparser, robot);
     if (!this->robotConn->connectRobot()) {
-        RCLCPP_INFO_STREAK(this->get_logger(), "RosAria: ARIA could not connect to robot!"
+        RCLCPP_INFO_STREAM(this->get_logger(), "RosAria: ARIA could not connect to robot!"
                                                    << "(Check ~port parameter is correct, and "
-                                                      "permissions on port device,"
+                                                   <<  "permissions on port device,"
                                                    << "or any errors reported above)");
     }
 
