@@ -17,6 +17,7 @@ jobs:
                   options: --line-length=99
     clang:
         name: Set up Clang
+        runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
             - uses: egor-tensin/setup-clang@v1
