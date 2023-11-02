@@ -1,46 +1,64 @@
+// Copyright 2023 WUST Department of Cybernetics and Robotics
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+// USA.
+
+#ifndef ROS2ARIA__ROS2ARIA_HPP_
+#define ROS2ARIA__ROS2ARIA_HPP_
+
+#include <memory>
+#include <string>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #include <utility>
-#include<string>
 
-#include "ros2aria/raiibot.hpp"
 #include <Aria/Aria.h>
 #include "geometry_msgs/msg/twist.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "rclcpp/rclcpp.hpp"
-#include "ros2aria_msgs/msg/robot_info_msg.hpp"
+#include "ros2aria/raiibot.hpp"
 #include "ros2aria_msgs/msg/restrictions_msg.hpp"
+#include "ros2aria_msgs/msg/robot_info_msg.hpp"
 #include "sensor_msgs/msg/joint_state.hpp"
+#include "sensor_msgs/msg/laser_scan.hpp"
 #include "sensor_msgs/msg/point_cloud.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
-#include "sensor_msgs/msg/laser_scan.hpp"
 #include "std_msgs/msg/bool.hpp"
 #include "std_msgs/msg/float32.hpp"
 #include "std_msgs/msg/int8.hpp"
 #include "std_srvs/srv/empty.hpp"
-#include "tf2_ros/transform_broadcaster.h"
 #include "tf2/LinearMath/Quaternion.h"
+#include "tf2_ros/transform_broadcaster.h"
 
 #define UNUSED(x) (void)(x)
 
-constexpr double mm_per_sec_to_rad_per_sec(double mm_per_sec){
-    return mm_per_sec  / 195.0 / 2.0; /*diameter in mm*/
+constexpr double mm_per_sec_to_rad_per_sec(double mm_per_sec) {
+    return mm_per_sec / 195.0 / 2.0; /*diameter in mm*/
 }
 
-constexpr double encoder_to_rad(long int encoder){
+constexpr double encoder_to_rad(int64_t encoder) {
     return static_cast<double>(encoder) * M_PI / 32768.0;
 }
 
-constexpr float distance(float a, float b){
-    return std::sqrt(a*a + b*b);
-}
+constexpr float distance(float a, float b) { return std::sqrt(a * a + b * b); }
 
-class Ros2Aria : public rclcpp::Node
-{
-public:
+class Ros2Aria : public rclcpp::Node {
+   public:
     Ros2Aria();
     ~Ros2Aria();
 
-private:
+   private:
     std::size_t id{0};
     RAIIBot::SharedPtr robot;
     ArFunctorC<Ros2Aria> sensorCb;
@@ -52,9 +70,9 @@ private:
     bool use_sonar = true;
     bool use_safety_system = true;
     uint8_t num_of_sonars = 0;
-    std::string ros_namespace="";
+    std::string ros_namespace = "";
 
-    std::size_t extract_number_from_string(const std::string& str);
+    std::size_t extract_number_from_string(const std::string &str);
 
     void handle_parameters();
     void publish();
@@ -65,7 +83,8 @@ private:
     void publishSonar(sensor_msgs::msg::PointCloud cloud);
     void publishSonarPointCloud2(sensor_msgs::msg::PointCloud cloud);
 
-    std::pair<nav_msgs::msg::Odometry, geometry_msgs::msg::TransformStamped> handlePose(rclcpp::Time stamp);
+    std::pair<nav_msgs::msg::Odometry, geometry_msgs::msg::TransformStamped> handlePose(
+        rclcpp::Time stamp);
     std::unique_ptr<tf2_ros::TransformBroadcaster> odom_tf_broadcaster_;
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr pose_pub_;
     void publishPose(nav_msgs::msg::Odometry pose);
@@ -102,17 +121,24 @@ private:
 
     // services
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr stop_service_;
-    void stop(const std::shared_ptr<std_srvs::srv::Empty::Request> request, std::shared_ptr<std_srvs::srv::Empty::Response> response) const;
+    void stop(const std::shared_ptr<std_srvs::srv::Empty::Request> request,
+              std::shared_ptr<std_srvs::srv::Empty::Response> response) const;
 
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr gripper_open_service_;
-    void gripper_open_callback(const std_srvs::srv::Empty::Request::SharedPtr request, std_srvs::srv::Empty::Response::SharedPtr response) const;
+    void gripper_open_callback(const std_srvs::srv::Empty::Request::SharedPtr request,
+                               std_srvs::srv::Empty::Response::SharedPtr response) const;
 
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr gripper_close_service_;
-    void gripper_close_callback(const std_srvs::srv::Empty::Request::SharedPtr request, std_srvs::srv::Empty::Response::SharedPtr response) const;
+    void gripper_close_callback(const std_srvs::srv::Empty::Request::SharedPtr request,
+                                std_srvs::srv::Empty::Response::SharedPtr response) const;
 
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr gripper_up_service_;
-    void gripper_up_callback(const std_srvs::srv::Empty::Request::SharedPtr request, std_srvs::srv::Empty::Response::SharedPtr response) const;
+    void gripper_up_callback(const std_srvs::srv::Empty::Request::SharedPtr request,
+                             std_srvs::srv::Empty::Response::SharedPtr response) const;
 
     rclcpp::Service<std_srvs::srv::Empty>::SharedPtr gripper_down_service_;
-    void gripper_down_callback(const std_srvs::srv::Empty::Request::SharedPtr request, std_srvs::srv::Empty::Response::SharedPtr response) const;
+    void gripper_down_callback(const std_srvs::srv::Empty::Request::SharedPtr request,
+                               std_srvs::srv::Empty::Response::SharedPtr response) const;
 };
+
+#endif  // ROS2ARIA__ROS2ARIA_HPP_

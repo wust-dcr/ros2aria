@@ -28,7 +28,7 @@
   <author email="me@irth.pl">Wojciech Kwolek</author>
   <author email="delicat.kuba@gmail.com">Jakub Delicat</author>
 
-  <license>GPL2</license>
+  <license>GPLv2</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

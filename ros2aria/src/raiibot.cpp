@@ -1,5 +1,21 @@
-#include "ros2aria/raiibot.hpp"
+// Copyright 2023 WUST Department of Cybernetics and Robotics
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+// USA.
 
+#include "ros2aria/raiibot.hpp"
 
 RAIIBot::RAIIBot(rclcpp::Node *node, std::string port) {
     this->robot = new ArRobot();
@@ -9,18 +25,16 @@ RAIIBot::RAIIBot(rclcpp::Node *node, std::string port) {
 
     args = new ArArgumentBuilder();
     this->argparser = new ArArgumentParser(args);
-    argparser->loadDefaultArguments();  // adds any arguments given in /etc/Aria.args.  Useful on robots with unusual serial port or baud rate (e.g. pioneer lx)
+    argparser->loadDefaultArguments();
     std::string port_arg = "-robotPort " + port;
-    args->add(port_arg.c_str());  // pass robot's serial port to Aria // TODO: use `port` variable.
-    // args->add("-robotLogPacketsReceived");                    // log received packets
-    // args->add("-robotLogPacketsSent");                        // log sent packets
-    // args->add("-robotLogVelocitiesReceived"); // log received velocities
-    // args->add("-robotLogMovementSent");
-    // args->add("-robotLogMovementReceived");
+    args->add(port_arg.c_str());
+
     this->robotConn = new ArRobotConnector(argparser, robot);
     if (!this->robotConn->connectRobot()) {
-        // RCLCPP_INFO(this->get_logger(), "RosAria: ARIA could not connect to robot! (Check ~port parameter is correct, and permissions on port device, or any errors reported above)");
-        // rclcpp::shutdown();
+        RCLCPP_INFO_STREAK(this->get_logger(), "RosAria: ARIA could not connect to robot!"
+                                                   << "(Check ~port parameter is correct, and "
+                                                      "permissions on port device,"
+                                                   << "or any errors reported above)");
     }
 
     this->robot->runAsync(true);
@@ -30,8 +44,7 @@ RAIIBot::RAIIBot(rclcpp::Node *node, std::string port) {
 }
 
 RAIIBot ::~RAIIBot() {
-    std::cout << std::endl
-              << "RAIIBOT DESTRUCTOR RUNNING!" << std::endl;
+    std::cout << std::endl << "RAIIBOT DESTRUCTOR RUNNING!" << std::endl;
 
     if (this->robot != nullptr) {
         this->robot->lock();
@@ -46,36 +59,24 @@ RAIIBot ::~RAIIBot() {
         std::cout << "disconnected" << std::endl;
     }
 
-    if (this->args != nullptr)
-        delete this->args;
-    if (this->argparser != nullptr)
-        delete this->argparser;
-    if (this->robotConn != nullptr)
-        delete this->robotConn;
-    if (this->robot != nullptr)
-        delete this->robot;
+    if (this->args != nullptr) delete this->args;
+    if (this->argparser != nullptr) delete this->argparser;
+    if (this->robotConn != nullptr) delete this->robotConn;
+    if (this->robot != nullptr) delete this->robot;
 }
 
-ArRobot *RAIIBot::getRobot() {
-    return this->robot;
-}
+ArRobot *RAIIBot::getRobot() { return this->robot; }
 
-ArGripper *RAIIBot::getGripper() {
-    return this->gripper;
-}
+ArGripper *RAIIBot::getGripper() { return this->gripper; }
 
-rclcpp::Clock::SharedPtr RAIIBot::getClock() {
-    return this->clock;
-}
+rclcpp::Clock::SharedPtr RAIIBot::getClock() { return this->clock; }
 
 void RAIIBot::lock() {
-    if (this->robot != nullptr)
-        this->robot->lock();
+    if (this->robot != nullptr) this->robot->lock();
 }
 
 void RAIIBot::unlock() {
-    if (this->robot != nullptr)
-        this->robot->unlock();
+    if (this->robot != nullptr) this->robot->unlock();
 }
 
 void RAIIBot::pokeWatchdog() {
@@ -83,9 +84,7 @@ void RAIIBot::pokeWatchdog() {
     this->lastWatchdogPoke = this->clock->now();
 }
 
-rclcpp::Logger RAIIBot::get_logger() {
-    return this->node->get_logger();
-}
+rclcpp::Logger RAIIBot::get_logger() { return this->node->get_logger(); }
 
 void RAIIBot::startWatchdog() {
     using namespace std::chrono_literals;
@@ -102,7 +101,6 @@ void RAIIBot::watchdog_cb() {
         auto r = this->getRobot();
         r->setVel(0);
         r->setRotVel(0);
-        if (r->hasLatVel())
-            r->setLatVel(0);
+        if (r->hasLatVel()) r->setLatVel(0);
     }
 }

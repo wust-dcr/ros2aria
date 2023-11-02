@@ -1,10 +1,10 @@
+// Copyright 2023 WUST Department of Cybernetics and Robotics, GPL2
 #include "ros2aria/ros2aria.hpp"
 
-void Ros2Aria::publish()
-{
+void Ros2Aria::publish() {
     rclcpp::Time t = robot->getClock()->now();
 
-    if(use_sonar){
+    if (use_sonar) {
         sensor_msgs::msg::PointCloud sonarData = handleSonar(t);
         publishSonar(sonarData);
         publishSonarPointCloud2(sonarData);

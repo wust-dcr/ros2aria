@@ -1,3 +1,4 @@
+// Copyright 2023 WUST Department of Cybernetics and Robotics, GPL2
 #include "ros2aria/ros2aria.hpp"
 
 void Ros2Aria::clutch_callback(const std_msgs::msg::Bool::SharedPtr msg) {
