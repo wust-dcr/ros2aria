@@ -15,20 +15,20 @@ jobs:
             - uses: psf/black@stable
               with:
                   options: --line-length=99
-
-    spellcheck:
-        name: Spellcheck
-        runs-on: ubuntu-latest
+    clang:
+        name: Set up Clang
         steps:
             - uses: actions/checkout@v3
-            - uses: rojopolis/spellcheck-github-actions@0.33.1
-              name: Spellcheck
+            - uses: egor-tensin/setup-clang@v1
+              with:
+                version: latest
+                platform: x64
 
     ros_industrial_ci:
         name: ROS Industrial CI
         needs:
             - black
-            - spellcheck
+            - clang
         strategy:
             fail-fast: false
             matrix:
